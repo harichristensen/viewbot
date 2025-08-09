@@ -1,0 +1,16 @@
+{
+  "name": "@viewbot/shared",
+  "version": "1.0.0",
+  "description": "Shared utilities and models for ViewBot platform",
+  "main": "index.js",
+  "dependencies": {
+    "sequelize": "^6.32.1",
+    "pg": "^8.11.1",
+    "pg-hstore": "^2.3.4",
+    "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^9.0.1",
+    "minio": "^7.1.1",
+    "redis": "^4.6.7",
+    "winston": "^3.9.0"
+  }
+}

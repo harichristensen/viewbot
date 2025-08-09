@@ -1,0 +1,21 @@
+{
+  "name": "viewbot-platform",
+  "version": "1.0.0",
+  "description": "ViewBot platform with bot simulation system",
+  "private": true,
+  "scripts": {
+    "dev": "docker-compose up",
+    "build": "docker-compose build",
+    "seed": "node scripts/seedBotUsers.js",
+    "migrate": "node scripts/migration/runMigrations.js"
+  },
+  "workspaces": [
+    "app",
+    "bot",
+    "shared"
+  ],
+  "devDependencies": {
+    "eslint": "^8.45.0",
+    "prettier": "^2.8.8"
+  }
+}

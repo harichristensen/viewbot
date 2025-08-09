@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewBot Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-robot"></i> ViewBot Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#scheduler">Scheduler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#simulations">Simulations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#config">Configuration</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-5 pt-3">
+        <!-- Overview Section -->
+        <section id="overview" class="mb-5">
+            <h2 class="mb-4">System Overview</h2>
+            <div class="row">
+                <!-- Status Cards -->
+                <div class="col-md-3 mb-3">
+                    <div class="card status-card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-people-fill"></i> Bot Users
+                            </h5>
+                            <p class="card-text display-4" id="bot-users-count">-</p>
+                            <small class="text-muted">Active: <span id="active-bots">-</span></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card status-card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-images"></i> Posts Today
+                            </h5>
+                            <p class="card-text display-4" id="posts-today">-</p>
+                            <small class="text-muted">Total: <span id="total-posts">-</span></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card status-card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-graph-up"></i> Active Simulations
+                            </h5>
+                            <p class="card-text display-4" id="active-simulations">-</p>
+                            <small class="text-muted">Success Rate: <span id="success-rate">-</span>%</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card status-card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-clock-history"></i> Scheduler
+                            </h5>
+                            <p class="card-text display-4" id="scheduler-status">-</p>
+                            <small class="text-muted">Jobs: <span id="scheduled-jobs">-</span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Activity -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Real-time Activity (Last 5 Minutes)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <h6>Views</h6>
+                                    <p class="display-6" id="realtime-views">-</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Likes</h6>
+                                    <p class="display-6" id="realtime-likes">-</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Posts</h6>
+                                    <p class="display-6" id="realtime-posts">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scheduler Section -->
+        <section id="scheduler" class="mb-5">
+            <h2 class="mb-4">Posting Scheduler</h2>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Scheduler Control</h5>
+                    <div>
+                        <button class="btn btn-success btn-sm" onclick="startScheduler()">
+                            <i class="bi bi-play-fill"></i> Start
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="stopScheduler()">
+                            <i class="bi bi-stop-fill"></i> Stop
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="reloadScheduler()">
+                            <i class="bi bi-arrow-clockwise"></i> Reload
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="scheduler-jobs" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Config ID</th>
+                                    <th>Name</th>
+                                    <th>Last Run</th>
+                                    <th>Run Count</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduler-jobs-body">
+                                <!-- Jobs will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simulations Section -->
+        <section id="simulations" class="mb-5">
+            <h2 class="mb-4">Viral Simulations</h2>
+            
+            <!-- Start New Simulation -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Start New Simulation</h5>
+                </div>
+                <div class="card-body">
+                    <form id="new-simulation-form">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Target Media ID</label>
+                                <input type="number" class="form-control" id="sim-media-id" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Views</label>
+                                <input type="number" class="form-control" id="sim-max-views" value="100000" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Likes</label>
+                                <input type="number" class="form-control" id="sim-max-likes" value="5000">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Duration (hours)</label>
+                                <input type="number" class="form-control" id="sim-duration" value="72">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="bi bi-rocket-takeoff"></i> Start Simulation
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Active Simulations -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Active Simulations</h5>
+                </div>
+                <div class="card-body">
+                    <div id="active-simulations-list">
+                        <!-- Simulations will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration Section -->
+        <section id="config" class="mb-5">
+            <h2 class="mb-4">Bot Configuration</h2>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Configurations</h5>
+                    <button class="btn btn-primary btn-sm" onclick="showNewConfigModal()">
+                        <i class="bi bi-plus-circle"></i> New Config
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Active</th>
+                                    <th>Last Run</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config-table-body">
+                                <!-- Configs will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="notification-toast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
