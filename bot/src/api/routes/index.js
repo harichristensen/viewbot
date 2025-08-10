@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/auth');
+const { snakeToCamelMiddleware, camelToSnakeMiddleware } = require('../../utils/naming');
 const schedulerRoutes = require('./scheduler');
 const simulationRoutes = require('./simulation');
 const configRoutes = require('./config');
 const statsRoutes = require('./stats');
+
+// Apply naming convention middleware globally
+router.use(snakeToCamelMiddleware);
+router.use(camelToSnakeMiddleware);
 
 // Public routes
 router.get('/status', (req, res) => {

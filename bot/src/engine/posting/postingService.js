@@ -7,14 +7,15 @@ const db = require('../../../../shared/database/models');
 const logger = require('../../utils/logger');
 const { getRandomBotUser, authenticateUser } = require('../../utils/auth');
 const { selectRandomMedia, getMediaMetadata } = require('../../utils/media');
+const appConfig = require('../../config/config');
 
 class PostingService {
   constructor(config = {}) {
     this.config = {
-      apiBaseUrl: process.env.MAIN_APP_API || 'http://app:3000/api',
-      mediaDir: process.env.BOT_MEDIA_DIR || '/app/media',
-      minioEndpoint: process.env.MINIO_ENDPOINT || 'minio:9000',
-      botUserPassword: process.env.BOT_USER_PASSWORD || 'default_bot_password',
+      apiBaseUrl: appConfig.api.mainAppUrl,
+      mediaDir: appConfig.bot.mediaDir,
+      minioEndpoint: appConfig.minio.endpoint,
+      botUserPassword: appConfig.bot.userPassword,
       ...config
     };
   }
@@ -280,7 +281,10 @@ class PostingService {
     }
 
     // Add random delay to simulate thinking/typing time
-    const delay = faker.number.int({ min: 3000, max: 15000 });
+    const delay = faker.number.int({
+      min: appConfig.posting.humanDelay.min,
+      max: appConfig.posting.humanDelay.max
+    });
     logger.info(`Waiting ${delay}ms to simulate human behavior...`);
     await new Promise(resolve => setTimeout(resolve, delay));
 

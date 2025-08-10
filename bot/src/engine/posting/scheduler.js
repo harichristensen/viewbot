@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const PostingService = require('./postingService');
 const db = require('../../../../shared/database/models');
 const logger = require('../../utils/logger');
+const appConfig = require('../../config/config');
 
 class PostingScheduler {
   constructor() {
@@ -47,8 +48,8 @@ class PostingScheduler {
     try {
       const { id, name, config: jobConfig, schedule } = config;
       
-      // Default schedule: every 5-10 minutes during active hours
-      const cronPattern = schedule?.pattern || '*/7 * * * *';
+      // Default schedule from config
+      const cronPattern = schedule?.pattern || appConfig.posting.defaultSchedule;
       
       logger.info(`Scheduling job "${name}" (ID: ${id}) with pattern: ${cronPattern}`);
 
@@ -101,13 +102,13 @@ class PostingScheduler {
     });
 
     try {
-      // Apply job configuration
+      // Apply job configuration with defaults from config
       const postingConfig = {
-        postingProbability: jobConfig.postingProbability || 0.7,
-        minPostsPerDay: jobConfig.minPostsPerDay || 5,
-        maxPostsPerDay: jobConfig.maxPostsPerDay || 20,
-        activeHours: jobConfig.activeHours || { start: 6, end: 23 },
-        mediaTypes: jobConfig.mediaTypes || ['video', 'image']
+        postingProbability: jobConfig.postingProbability || appConfig.posting.postingProbability,
+        minPostsPerDay: jobConfig.minPostsPerDay || appConfig.posting.minPostsPerDay,
+        maxPostsPerDay: jobConfig.maxPostsPerDay || appConfig.posting.maxPostsPerDay,
+        activeHours: jobConfig.activeHours || appConfig.posting.activeHours,
+        mediaTypes: jobConfig.mediaTypes || appConfig.posting.mediaTypes
       };
 
       // Check if within active hours
@@ -157,7 +158,7 @@ class PostingScheduler {
       await db.BotConfig.update(
         { 
           lastRunAt: new Date(),
-          nextRunAt: this.getNextRunTime('*/7 * * * *')
+          nextRunAt: this.getNextRunTime(appConfig.posting.defaultSchedule)
         },
         { where: { id } }
       );
